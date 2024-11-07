@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "PolarStar"
+name = "polarstar"
 version = "0.1.0"
 description = "Polar Star"
 authors = ["Júlio Gallinaro Maranho and Patrícia Aparecida da Ana <juliogallinaro@gmail.com>"]
