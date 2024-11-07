@@ -6,7 +6,6 @@
 [![License](https://img.shields.io/pypi/l/PolarStar)][license]
 
 [![Documentation Status](https://readthedocs.org/projects/polarstar/badge/?version=latest)](https://polarstar.readthedocs.io/en/latest/?badge=latest)
-
 [![Tests](https://github.com/juliogallinaro/PolarStar/workflows/Tests/badge.svg)][tests]
 [![Codecov](https://codecov.io/gh/juliogallinaro/PolarStar/branch/main/graph/badge.svg)][codecov]
 
