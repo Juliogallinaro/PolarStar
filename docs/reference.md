@@ -4,5 +4,5 @@
 
 ```{eval-rst}
 .. automodule:: polarstar
-   :members:
+   :members: Júlio Gallinaro Maranho and Patrícia Aparecida da Ana
 ```
