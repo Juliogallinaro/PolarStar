@@ -5,7 +5,8 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/PolarStar)][python version]
 [![License](https://img.shields.io/pypi/l/PolarStar)][license]
 
-[![Read the documentation at https://PolarStar.readthedocs.io/](https://img.shields.io/readthedocs/PolarStar/latest.svg?label=Read%20the%20Docs)][read the docs]
+[![Documentation Status](https://readthedocs.org/projects/polarstar/badge/?version=latest)](https://polarstar.readthedocs.io/en/latest/?badge=latest)
+
 [![Tests](https://github.com/juliogallinaro/PolarStar/workflows/Tests/badge.svg)][tests]
 [![Codecov](https://codecov.io/gh/juliogallinaro/PolarStar/branch/main/graph/badge.svg)][codecov]
 
