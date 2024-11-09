@@ -93,6 +93,11 @@ jobs:
         run: |
           nox --python=${{ matrix.python }}
 
+      - name: Combine coverage files
+        if: always() && matrix.session == 'tests'
+        run: |
+          coverage combine || true
+
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
         uses: "actions/upload-artifact@v4"
