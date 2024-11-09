@@ -1,5 +1,4 @@
 """Nox sessions."""
-
 import os
 import shlex
 import shutil
@@ -144,13 +143,7 @@ def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
     requirements = session.poetry.export_requirements()
     session.install("safety")
-    session.run(
-        "safety",
-        "check",
-        "--full-report",
-        f"--file={requirements}",
-        "--ignore=70612",
-    )
+    session.run("safety", "check", "--full-report", f"--file={requirements}")
 
 
 @session(python=python_versions)
@@ -178,10 +171,15 @@ def tests(session: Session) -> None:
 
 @session(python=python_versions[0])
 def coverage(session: Session) -> None:
-    """Upload coverage data."""
-    session.install("coverage[toml]", "codecov")
-    session.run("coverage", "xml", "--fail-under=0")
-    session.run("codecov", *session.posargs)
+    """Produce the coverage report."""
+    args = session.posargs or ["report"]
+
+    session.install("coverage[toml]")
+
+    if not session.posargs and any(Path().glob(".coverage.*")):
+        session.run("coverage", "combine")
+
+    session.run("coverage", *args)
 
 
 @session(python=python_versions[0])
