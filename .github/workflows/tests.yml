@@ -93,11 +93,15 @@ jobs:
         run: |
           nox --python=${{ matrix.python }}
 
+      - name: Set timestamp
+        run: |
+          echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-data-${{ github.run_id }}
+          name: coverage-data-${{ env.TIMESTAMP }}
           path: ".coverage.*"
           include-hidden-files: true
 
