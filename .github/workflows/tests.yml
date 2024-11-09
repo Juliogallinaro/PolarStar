@@ -135,8 +135,15 @@ jobs:
           pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry
           nox --version
 
-      - name: Install Nox
+      - name: Run Nox for coverage
         run: |
           nox --session=coverage
-          env:
-                CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: true
