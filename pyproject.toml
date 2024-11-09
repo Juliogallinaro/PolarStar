@@ -51,6 +51,9 @@ myst-parser = {version = ">=1.0"}
 [tool.poetry.scripts]
 PolarStar = "polarstar.__main__:main"
 
+[tool.poetry.group.dev.dependencies]
+codecov = "^2.1.13"
+
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
 tests = ["tests", "*/tests"]
