@@ -94,7 +94,7 @@ jobs:
           nox --python=${{ matrix.python }}
 
       - name: List directory contents
-        run: ls -la .nox
+        run: ls -la
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
