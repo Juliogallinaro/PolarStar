@@ -19,7 +19,7 @@ classifiers = [
 Changelog = "https://github.com/juliogallinaro/PolarStar/releases"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 click = ">=8.0.1"
 
 [tool.poetry.dev-dependencies]
@@ -40,13 +40,13 @@ pre-commit = ">=2.16.0"
 pre-commit-hooks = ">=4.1.0"
 pytest = ">=6.2.5"
 pyupgrade = ">=2.29.1"
-safety = ">=1.10.3"
+safety = ">=3.2"
 sphinx = ">=4.3.2"
 sphinx-autobuild = ">=2021.3.14"
 sphinx-click = ">=3.0.2"
 typeguard = ">=2.13.3"
 xdoctest = {extras = ["colors"], version = ">=0.15.10"}
-myst-parser = {version = ">=0.16.1"}
+myst-parser = {version = ">=1.0"}
 
 [tool.poetry.scripts]
 PolarStar = "polarstar.__main__:main"

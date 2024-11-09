@@ -1,4 +1,5 @@
 """Sphinx configuration."""
+
 project = "Polar Star"
 author = "Júlio Gallinaro Maranho and Patrícia Aparecida da Ana"
 copyright = "2024, Júlio Gallinaro Maranho and Patrícia Aparecida da Ana"
