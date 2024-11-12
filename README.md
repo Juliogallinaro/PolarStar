@@ -1,9 +1,9 @@
 # Polar Star
 
-[![PyPI](https://img.shields.io/pypi/v/PolarStar.svg)][pypi_]
-[![Status](https://img.shields.io/pypi/status/PolarStar.svg)][status]
-[![Python Version](https://img.shields.io/pypi/pyversions/PolarStar)][python version]
-[![License](https://img.shields.io/pypi/l/PolarStar)][license]
+[![PyPI](https://img.shields.io/pypi/v/polarstar.svg)][pypi_]
+[![Status](https://img.shields.io/pypi/status/polarstar.svg)][status]
+[![Python Version](https://img.shields.io/pypi/pyversions/polarstar)][python version]
+[![License](https://img.shields.io/pypi/l/polarstar)][license]
 
 [![Documentation Status](https://readthedocs.org/projects/polarstar/badge/?version=latest)](https://polarstar.readthedocs.io/en/latest/?badge=latest)
 [![Tests](https://github.com/juliogallinaro/PolarStar/workflows/Tests/badge.svg)][tests]
