@@ -14,12 +14,12 @@ class Plate:
            Number of columns in the plate.
     """
 
-    def __init__(self, rows, cols):
+    def __init__(self, rows: int, cols: int) -> None:
         self.rows = rows
         self.cols = cols
         self.data = np.empty((rows, cols), dtype=object)
 
-    def pos_to_index(self, row, col):
+    def pos_to_index(self, row: int, col: int) -> int:
         """
         Convert a row and column position to a linear index.
 
@@ -37,7 +37,7 @@ class Plate:
         """
         return row * self.cols + col
 
-    def index_to_pos(self, index):
+    def index_to_pos(self, index: int) -> tuple[int, int]:
         """
         Convert a linear index to row and column positions.
 
@@ -53,7 +53,7 @@ class Plate:
         """
         return divmod(index, self.cols)
 
-    def convert_concentration(self, concentration):
+    def convert_concentration(self, concentration: float) -> tuple[float, str]:
         """
         Convert concentration to a more readable format (mM, µM, nM, pM).
 
@@ -81,7 +81,7 @@ class Plate:
             concentration_display = concentration * 1e9
         return concentration_display, unit
 
-    def index_to_row_label(self, index):
+    def index_to_row_label(self, index: int) -> str:
         """
         Convert row index to a label (e.g., 'A', 'B').
 
@@ -104,13 +104,13 @@ class Plate:
 
     def fill_serial_dilutions(
         self,
-        start_pos,
-        initial_concentration,
-        dilution_factor,
-        num_dilutions,
-        substance,
-        color,
-    ):
+        start_pos: str,
+        initial_concentration: float,
+        dilution_factor: float,
+        num_dilutions: int,
+        substance: str,
+        color: str,
+    ) -> None:
         """
         Fill the plate with serial dilutions starting from a given position.
 
@@ -146,7 +146,7 @@ class Plate:
                     unit,
                 )
 
-    def fill_custom(self, pos, value, substance, color):
+    def fill_custom(self, pos: str, value: float, substance: str, color: str) -> None:
         """
         Fill a specific well with a custom value.
 
@@ -166,7 +166,7 @@ class Plate:
         if row < self.rows and col < self.cols:
             self.data[row, col] = (f"{chr(65+row)}{col+1}", substance, color, value, "")
 
-    def __str__(self):
+    def __str__(self) -> str:
         result = ""
         for row in range(self.rows):
             for col in range(self.cols):
@@ -177,7 +177,7 @@ class Plate:
             result += "\n"
         return result
 
-    def save(self, filename):
+    def save(self, filename: str) -> None:
         """
         Save plate data to a file.
 
@@ -189,7 +189,9 @@ class Plate:
         with open(filename, "wb") as f:
             np.save(f, self.data)
 
-    def plot_plate(self, figsize=(14, 8), show_concentration=True):
+    def plot_plate(
+        self, figsize: tuple[int, int] = (14, 8), show_concentration: bool = True
+    ) -> None:
         """
         Plot the plate with well contents and concentrations.
 
@@ -268,8 +270,14 @@ class Plate:
         plt.show()
 
     def generate_gcode(
-        self, x_spacing=9, y_spacing=9, z_safe=0, z_read=0, offset=-90, filename=None
-    ):
+        self,
+        x_spacing: float = 9,
+        y_spacing: float = 9,
+        z_safe: float = 0,
+        z_read: float = 0,
+        offset: float = -90,
+        filename: str = None,
+    ) -> str:
         """
         Generate G-code for CNC movement across wells.
 
@@ -315,7 +323,7 @@ class Plate:
         return gcode
 
 
-def load_plate(filename):
+def load_plate(filename: str) -> Plate:
     """
     Load plate data from a file.
 

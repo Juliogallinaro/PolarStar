@@ -21,7 +21,7 @@ Changelog = "https://github.com/juliogallinaro/PolarStar/releases"
 [tool.poetry.dependencies]
 python = "^3.8"
 click = ">=8.0.1"
-matplotlib = "^3.9"
+matplotlib = "^3.7"
 numpy = "^1.26"
 
 [tool.poetry.dev-dependencies]
