@@ -24,7 +24,7 @@ def test_initialization(plate):
     assert plate.rows == 2
     assert plate.cols == 3
     assert plate.data.shape == (2, 3)
-    assert np.all(plate.data is None)
+    assert np.all(np.equal(plate.data, None))
 
 
 def test_pos_to_index(plate):
