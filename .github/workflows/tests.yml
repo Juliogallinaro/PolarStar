@@ -148,11 +148,11 @@ jobs:
 
       - name: Combine coverage data and display human readable report
         run: |
-          nox --session=coverage
+          nox --session=coverage -- --fail-under=80
 
       - name: Create coverage report
         run: |
-          nox --session=coverage -- xml
+          nox --session=coverage -- xml -- xml --fail-under=80
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v4
