@@ -214,16 +214,36 @@ class Plate:
             result += "\n"
         return result
 
-    def save(self, filename: str) -> None:
-        """Save plate data to a file.
+    def save(self, filename: str) -> str:
+        """Save plate data to a file with a .star extension.
 
         Parameters
         ----------
         filename : str
-            Path to save the data.
+            The base path to save the data. If the filename does not already
+            end with `.star`, the function will automatically append it.
+
+        Returns
+        -------
+        str
+            The full path of the saved file, including the .star extension.
+
+        Notes
+        -----
+        The saved file will have a `.star` extension if not already present,
+        and the data will be stored in binary format using NumPy's `np.save`.
         """
+        # Append `.star` extension if not already present
+        if not filename.endswith(".star"):
+            filename += ".star"
+
         with open(filename, "wb") as f:
             np.save(f, self.data)
+
+        # Print confirmation message
+        print(f"Data successfully saved to {filename}")
+
+        return filename
 
     def plot_plate(
         self, figsize: Tuple[int, int] = (14, 8), show_concentration: bool = True
