@@ -95,7 +95,7 @@ jobs:
 
       - name: Set timestamp
         run: |
-          echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+          echo "TIMESTAMP=$(date +'%Y%m%d%H%M%S%3N')" >> $GITHUB_ENV
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'

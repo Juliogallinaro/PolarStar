@@ -11,8 +11,8 @@ from typing import Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.lines import Line2D
-from matplotlib.patches import Circle
+from matplotlib.lines import Line2D  # type: ignore
+from matplotlib.patches import Circle  # type: ignore
 
 
 class Plate:
