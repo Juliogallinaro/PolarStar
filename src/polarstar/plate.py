@@ -1,27 +1,58 @@
+"""Module for managing plates.
+
+This module provides the Plate class, which includes methods for storing
+and organizing substances in a multi-well plate format, performing serial dilutions,
+custom well configurations, and generating G-code for automated CNC
+movements over the wells.
+"""
+
+from typing import Optional
+from typing import Tuple
+
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
+from matplotlib.patches import Circle
 
 
 class Plate:
-    """
-    Class representing a multi-well plate for storing substances, concentrations or custom information.
+    """Class representing a plate for storing substances, concentrations or custom information.
 
-       Parameters
-       ----------
-       rows : int
-           Number of rows in the plate.
-       cols : int
-           Number of columns in the plate.
+    Parameters
+    ----------
+    rows : int
+        Number of rows in the plate.
+    cols : int
+        Number of columns in the plate.
     """
 
     def __init__(self, rows: int, cols: int) -> None:
+        """Initialize a plate for storing substances, concentrations, or custom information.
+
+        Parameters
+        ----------
+        rows : int
+            The number of rows in the plate.
+        cols : int
+            The number of columns in the plate.
+
+        Attributes
+        ----------
+        rows : int
+            Stores the number of rows in the plate.
+        cols : int
+            Stores the number of columns in the plate.
+        data : numpy.ndarray
+            A 2D array to hold data for each well in the plate.
+            Each element is initialized as an empty object and can be
+            filled with information related to substance, concentration, or other custom values.
+        """
         self.rows = rows
         self.cols = cols
         self.data = np.empty((rows, cols), dtype=object)
 
     def pos_to_index(self, row: int, col: int) -> int:
-        """
-        Convert a row and column position to a linear index.
+        """Convert a row and column position to a linear index.
 
         Parameters
         ----------
@@ -37,9 +68,8 @@ class Plate:
         """
         return row * self.cols + col
 
-    def index_to_pos(self, index: int) -> tuple[int, int]:
-        """
-        Convert a linear index to row and column positions.
+    def index_to_pos(self, index: int) -> Tuple[int, int]:
+        """Convert a linear index to row and column positions.
 
         Parameters
         ----------
@@ -53,9 +83,8 @@ class Plate:
         """
         return divmod(index, self.cols)
 
-    def convert_concentration(self, concentration: float) -> tuple[float, str]:
-        """
-        Convert concentration to a more readable format (mM, µM, nM, pM).
+    def convert_concentration(self, concentration: float) -> Tuple[float, str]:
+        """Convert concentration to a more readable format (mM, µM, nM, pM).
 
         Parameters
         ----------
@@ -82,8 +111,7 @@ class Plate:
         return concentration_display, unit
 
     def index_to_row_label(self, index: int) -> str:
-        """
-        Convert row index to a label (e.g., 'A', 'B').
+        """Convert row index to a label (e.g., 'A', 'B').
 
         Parameters
         ----------
@@ -111,8 +139,7 @@ class Plate:
         substance: str,
         color: str,
     ) -> None:
-        """
-        Fill the plate with serial dilutions starting from a given position.
+        """Fill the plate with serial dilutions starting from a given position.
 
         Parameters
         ----------
@@ -147,8 +174,7 @@ class Plate:
                 )
 
     def fill_custom(self, pos: str, value: float, substance: str, color: str) -> None:
-        """
-        Fill a specific well with a custom value.
+        """Fill a specific well with a custom value.
 
         Parameters
         ----------
@@ -167,6 +193,17 @@ class Plate:
             self.data[row, col] = (f"{chr(65+row)}{col+1}", substance, color, value, "")
 
     def __str__(self) -> str:
+        """Return a string representation of the plate's contents.
+
+        Iterates over each well in the plate and appends its contents to a string.
+        If a well is empty, it appends "Empty" in its place.
+
+        Returns
+        -------
+        str
+            A formatted string where each row represents a row of wells in the plate,
+            with each well displaying its contents or marked as "Empty" if it has no data.
+        """
         result = ""
         for row in range(self.rows):
             for col in range(self.cols):
@@ -178,8 +215,7 @@ class Plate:
         return result
 
     def save(self, filename: str) -> None:
-        """
-        Save plate data to a file.
+        """Save plate data to a file.
 
         Parameters
         ----------
@@ -190,10 +226,9 @@ class Plate:
             np.save(f, self.data)
 
     def plot_plate(
-        self, figsize: tuple[int, int] = (14, 8), show_concentration: bool = True
+        self, figsize: Tuple[int, int] = (14, 8), show_concentration: bool = True
     ) -> None:
-        """
-        Plot the plate with well contents and concentrations.
+        """Plot the plate with well contents and concentrations.
 
         Parameters
         ----------
@@ -210,7 +245,7 @@ class Plate:
                     well_name, substance, color, concentration, unit = self.data[
                         row, col
                     ]
-                    circle = plt.Circle(
+                    circle = Circle(
                         (col + 0.5, self.rows - row - 0.5),
                         0.4,
                         edgecolor="black",
@@ -235,7 +270,7 @@ class Plate:
                         )
 
                     if substance not in legend_elements:
-                        legend_elements[substance] = plt.Line2D(
+                        legend_elements[substance] = Line2D(
                             [0],
                             [0],
                             marker="o",
@@ -246,7 +281,7 @@ class Plate:
                             markeredgecolor="black",
                         )
                 else:
-                    circle = plt.Circle(
+                    circle = Circle(
                         (col + 0.5, self.rows - row - 0.5),
                         0.4,
                         fill=False,
@@ -276,10 +311,9 @@ class Plate:
         z_safe: float = 0,
         z_read: float = 0,
         offset: float = -90,
-        filename: str = None,
+        filename: Optional[str] = None,
     ) -> str:
-        """
-        Generate G-code for CNC movement across wells.
+        """Generate G-code for CNC movement across wells.
 
         Parameters
         ----------
@@ -297,8 +331,8 @@ class Plate:
             File path to save the G-code.
         """
         gcode = []
-        gcode.append("G21 ; Set units to millimeters")
-        gcode.append("G90 ; Use absolute positioning")
+        gcode.append("G21; Set units to millimeters")
+        gcode.append("G90; Use absolute positioning")
 
         for row in range(self.rows):
             for col in range(self.cols):
@@ -306,7 +340,8 @@ class Plate:
                     x = col * x_spacing
                     y = (row * y_spacing) + offset
                     gcode.append(
-                        f"G0 X{x:.2f} Y{y:.2f} Z{z_safe:.2f} ; Move to above well at ({row}, {col})"
+                        f"G0 X{x:.2f} Y{y:.2f} Z{z_safe:.2f}"
+                        f"; Move to above well at ({row}, {col})"
                     )
                     gcode.append(f"G0 Z{-z_read:.2f} ; Lower to reading height")
                     gcode.append(f"Read well at {chr(ord('A') + row)}{col+1}")
@@ -314,18 +349,17 @@ class Plate:
 
         gcode.append("G0 X0 Y0; Return")
         gcode.append("M30 ; End of program")
-        gcode = "\n".join(gcode)
+        gcode_str = "\n".join(gcode)
 
         if filename is not None:
             with open(filename, "w") as file:
-                file.write(gcode)
+                file.write(gcode_str)
 
-        return gcode
+        return gcode_str
 
 
 def load_plate(filename: str) -> Plate:
-    """
-    Load plate data from a file.
+    """Load plate data from a file.
 
     Parameters
     ----------
