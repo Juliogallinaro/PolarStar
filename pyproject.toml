@@ -23,6 +23,7 @@ python = "^3.8"
 click = ">=8.0.1"
 matplotlib = "^3.7"
 numpy = "^1.24"
+pyserial = ">=3.0"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"

@@ -12,8 +12,9 @@ Exports:
 - load_plate: Function to load a saved plate configuration from a file.
 """
 
+from .cnc import CNCController
 from .plate import Plate
 from .plate import load_plate
 
 
-__all__ = ["Plate", "load_plate"]
+__all__ = ["Plate", "load_plate", "CNCController"]

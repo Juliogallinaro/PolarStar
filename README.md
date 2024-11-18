@@ -70,7 +70,7 @@ $ pip install polarstar
 
 ## Usage
 
-Please see the [Command-line Reference] for details.
+Please see the [Usage] for details.
 
 ## Contributing
 
