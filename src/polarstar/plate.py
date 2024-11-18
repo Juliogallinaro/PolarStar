@@ -146,7 +146,7 @@ class Plate:
         start_pos : str
             Start position (e.g., 'A1').
         initial_concentration : float
-            Initial concentration.
+            Initial concentration in millimolar (mM).
         dilution_factor : float
             Factor for serial dilutions.
         num_dilutions : int
