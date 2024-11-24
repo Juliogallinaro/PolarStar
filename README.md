@@ -45,7 +45,7 @@ To use POLAR, you can set up the equipment and connect it to STAR for data colle
 
 ---
 
-## STAR: Scientific Tools for Automation and Research
+## STAR: Scientific Tools for Automation and Replication
 
 **STAR** is a Python library focused on simplifying the automation of scientific experiments, including data collection and hardware control. While STAR is designed to integrate with POLAR, it can also be used independently for various scientific applications.
 

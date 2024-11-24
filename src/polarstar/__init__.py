@@ -1,15 +1,17 @@
-"""Polar Star.
+"""Scientific Tools for Automation and Replication - STAR.
 
 STAR is a Python library focused on simplifying the automation of scientific experiments,
 including data collection and hardware control. While STAR is designed to integrate with POLAR,
 it can also be used independently for various scientific applications.
 
 Modules:
-- plate: Defines the Plate class for handling data and automating optical measurements.
+- cnc: Manages CNC hardware communication and G-code operations.
+- plate: Defines the Plate class for data management and optical measurement automation.
 
 Exports:
-- Plate: Main class representing a plate.
-- load_plate: Function to load a saved plate configuration from a file.
+- Plate: Represents a microplate for organizing and managing well-based data.
+- load_plate: Loads a saved plate configuration from a file.
+- CNCController: Handles CNC hardware control and communication.
 """
 
 from .cnc import CNCController
