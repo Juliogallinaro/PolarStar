@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "polarstar"
-version = "0.2.0"
+version = "0.3.0"
 description = "Polar Star"
 authors = ["Júlio Gallinaro Maranho and Patrícia Aparecida da Ana <juliogallinaro@gmail.com>"]
 license = "GPL-3.0"

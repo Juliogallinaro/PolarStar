@@ -23,7 +23,7 @@
 
 ## Overview
 
-**POLAR** (Platform for Optical Laboratory Automation and Research) and **STAR** (Scientific Tools for Automation and Research) are designed to facilitate the automation and control of experiments in scientific research, with a special focus on optical experiments.
+**POLAR** (Platform for Optical Laboratory Automation and Research) and **STAR** (Scientific Tools for Automation and Replication) are designed to facilitate the automation and control of experiments in scientific research, with a special focus on optical experiments.
 
 - **POLAR** is a hardware platform that enables precise control and automation in optical laboratories, supporting high-throughput experimentation and analysis.
 - **STAR** is a Python library that provides tools for automation, data collection, and analysis, designed to work seamlessly with POLAR or as a standalone solution for general scientific research.
@@ -101,4 +101,4 @@ This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter]
 
 [license]: https://github.com/juliogallinaro/PolarStar/blob/main/LICENSE
 [contributor guide]: https://github.com/juliogallinaro/PolarStar/blob/main/CONTRIBUTING.md
-[command-line reference]: https://PolarStar.readthedocs.io/en/latest/usage.html
+[usage]: https://PolarStar.readthedocs.io/en/latest/usage.html

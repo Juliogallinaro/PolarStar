@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
-from polarstar.cnc import CNCController
+from polarstar import CNCController
 
 
 @pytest.fixture
