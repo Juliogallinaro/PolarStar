@@ -24,10 +24,35 @@ class Plate:
         Number of rows in the plate.
     cols : int
         Number of columns in the plate.
+    x_spacing : float, optional
+        Distance between wells along the X-axis in mm. Default is 9.
+    y_spacing : float, optional
+        Distance between wells along the Y-axis in mm. Default is 9.
+    z_read : float, optional
+        Z-axis height for interaction in mm. Default is -5.
+    z_safe : float, optional
+        Safe height in Z-axis for non-reading positions in mm. Default is 0.
+    offset_y : float, optional
+        Y-axis calibration offset in mm. Default is -90.
+    offset_z : float, optional
+        Z-axis calibration offset in mm. Default is -5.
+    diameter : float, optional
+        Well diameter in mm. Default is 6.94.
     """
 
-    def __init__(self, rows: int, cols: int) -> None:
-        """Initialize a plate for storing substances, concentrations, or custom information.
+    def __init__(
+        self,
+        rows: int,
+        cols: int,
+        x_spacing: float = 9,
+        y_spacing: float = 9,
+        z_read: float = -5,
+        offset_y: float = -90,
+        offset_z: float = -5,
+        diameter: float = 6.94,
+        z_safe: float = 0,
+    ) -> None:
+        """Initialize a plate with given dimensions and physical parameters.
 
         Parameters
         ----------
@@ -35,21 +60,76 @@ class Plate:
             The number of rows in the plate.
         cols : int
             The number of columns in the plate.
-
-        Attributes
-        ----------
-        rows : int
-            Stores the number of rows in the plate.
-        cols : int
-            Stores the number of columns in the plate.
-        data : numpy.ndarray
-            A 2D array to hold data for each well in the plate.
-            Each element is initialized as an empty object and can be
-            filled with information related to substance, concentration, or other custom values.
+        x_spacing : float, optional
+            Distance between wells along the X-axis in mm.
+        y_spacing : float, optional
+            Distance between wells along the Y-axis in mm.
+        z_read : float, optional
+            Z-axis height for interaction in mm.
+        z_safe : float, optional
+            Safe height in Z-axis for non-reading positions in mm.
+        offset_y : float, optional
+            Y-axis calibration offset in mm.
+        offset_z : float, optional
+            Z-axis calibration offset in mm.
+        diameter : float, optional
+            Well diameter in mm.
         """
         self.rows = rows
         self.cols = cols
+        self.x_spacing = x_spacing
+        self.y_spacing = y_spacing
+        self.z_read = z_read
+        self.z_safe = z_safe
+        self.offset_y = offset_y
+        self.offset_z = offset_z
+        self.diameter = diameter
         self.data = np.empty((rows, cols), dtype=object)
+
+    def generate_gcode(
+        self,
+        filename: Optional[str] = None,
+    ) -> str:
+        """Generate G-code for CNC movement across wells.
+
+        Parameters
+        ----------
+        filename : str, optional
+            File path to save the G-code.
+
+        Returns
+        -------
+        str
+            Generated G-code as a string.
+        """
+        gcode = []
+        gcode.append("G21; Set units to millimeters")
+        gcode.append("G90; Use absolute positioning")
+        gcode.append(f"G0 Z{-self.z_safe:.2f}")
+
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if self.data[row, col] is not None:
+                    x = col * self.x_spacing
+                    y = (row * self.y_spacing) + self.offset_y
+                    gcode.append(
+                        f"G0 X{x:.2f} Y{y:.2f} Z{-self.z_safe:.2f}"
+                        f"; Move to above well at ({row}, {col})"
+                    )
+                    gcode.append(f"G0 Z{-self.z_read:.2f}; Lower to reading height")
+                    gcode.append(f"Read well at {chr(ord('A') + row)}{col+1}")
+                    gcode.append(f"G0 Z{-self.z_safe:.2f}; Raise back to safe height")
+
+        gcode.append("G0 X0 Y0; Return")
+        gcode.append("G0 Z0; Return")
+        gcode.append("M30; End of program")
+        gcode_str = "\n".join(gcode)
+
+        if filename is not None:
+            with open(filename, "w") as file:
+                file.write(gcode_str)
+
+        return gcode_str
 
     def pos_to_index(self, row: int, col: int) -> int:
         """Convert a row and column position to a linear index.
@@ -130,7 +210,7 @@ class Plate:
             index = index // 26 - 1
         return label
 
-    def fill_serial_dilutions(
+    def set_serial_dilutions(
         self,
         start_pos: str,
         initial_concentration: float,
@@ -139,7 +219,10 @@ class Plate:
         substance: str,
         color: str,
     ) -> None:
-        """Fill the plate with serial dilutions starting from a given position.
+        """Set serial dilutions of a substance in wells starting from a given position.
+
+        This function assigns serial dilutions of a specified substance to consecutive wells,
+        following a given dilution factor.
 
         Parameters
         ----------
@@ -173,8 +256,8 @@ class Plate:
                     unit,
                 )
 
-    def fill_custom(self, pos: str, value: float, substance: str, color: str) -> None:
-        """Fill a specific well with a custom value.
+    def set_custom(self, pos: str, value: float, substance: str, color: str) -> None:
+        """Set a specific well with a custom value.
 
         Parameters
         ----------
@@ -246,7 +329,12 @@ class Plate:
         return filename
 
     def plot_plate(
-        self, figsize: Tuple[int, int] = (14, 8), show_concentration: bool = True
+        self,
+        figsize: Tuple[int, int] = (14, 8),
+        show_concentration: bool = True,
+        well_font_size: int = 10,
+        legend_font_size: int = 10,
+        tick_font_size: int = 6,
     ) -> None:
         """Plot the plate with well contents and concentrations.
 
@@ -256,7 +344,14 @@ class Plate:
             Figure size.
         show_concentration : bool
             Display concentration if True.
+        well_font_size : int
+            Font size for the text inside wells. Default is 10.
+        legend_font_size : int
+            Font size for the legend text. Default is 10.
+        tick_font_size : int
+            Font size for axis tick labels (row letters and column numbers). Default is 6.
         """
+        plt.style.context("default")
         legend_elements = {}
         fig, ax = plt.subplots(figsize=figsize)
         for row in range(self.rows):
@@ -285,7 +380,7 @@ class Plate:
                             text,
                             ha="center",
                             va="center",
-                            fontsize=10,
+                            fontsize=well_font_size,
                             color="white" if color in ["black", "blue"] else "black",
                         )
 
@@ -314,68 +409,18 @@ class Plate:
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_xticks(np.arange(self.cols) + 0.5)
-        ax.set_xticklabels(np.arange(1, self.cols + 1))
+        ax.set_xticklabels(np.arange(1, self.cols + 1), fontsize=tick_font_size)
         ax.set_yticks(np.arange(self.rows) + 0.5)
         labels = [self.index_to_row_label(i) for i in range(self.rows)]
-        ax.set_yticklabels(labels, fontsize=6)
+        ax.set_yticklabels(labels, fontsize=tick_font_size)
         ax.set_aspect("equal")
         ax.legend(
-            handles=legend_elements.values(), loc="upper left", bbox_to_anchor=(1, 1)
+            handles=legend_elements.values(),
+            loc="upper left",
+            bbox_to_anchor=(1, 1),
+            fontsize=legend_font_size,
         )
         plt.show()
-
-    def generate_gcode(
-        self,
-        x_spacing: float = 9,
-        y_spacing: float = 9,
-        z_safe: float = 0,
-        z_read: float = 0,
-        offset: float = -90,
-        filename: Optional[str] = None,
-    ) -> str:
-        """Generate G-code for CNC movement across wells.
-
-        Parameters
-        ----------
-        x_spacing : float
-            X-axis spacing between wells in mm.
-        y_spacing : float
-            Y-axis spacing between wells in mm.
-        z_safe : float
-            Safe height in Z-axis for non-reading positions.
-        z_read : float
-            Reading height in Z-axis.
-        offset : float
-            Offset for Y-axis.
-        filename : str, optional
-            File path to save the G-code.
-        """
-        gcode = []
-        gcode.append("G21; Set units to millimeters")
-        gcode.append("G90; Use absolute positioning")
-
-        for row in range(self.rows):
-            for col in range(self.cols):
-                if self.data[row, col] is not None:
-                    x = col * x_spacing
-                    y = (row * y_spacing) + offset
-                    gcode.append(
-                        f"G0 X{x:.2f} Y{y:.2f} Z{z_safe:.2f}"
-                        f"; Move to above well at ({row}, {col})"
-                    )
-                    gcode.append(f"G0 Z{-z_read:.2f} ; Lower to reading height")
-                    gcode.append(f"Read well at {chr(ord('A') + row)}{col+1}")
-                    gcode.append(f"G0 Z{z_safe:.2f} ; Raise back to safe height")
-
-        gcode.append("G0 X0 Y0; Return")
-        gcode.append("M30 ; End of program")
-        gcode_str = "\n".join(gcode)
-
-        if filename is not None:
-            with open(filename, "w") as file:
-                file.write(gcode_str)
-
-        return gcode_str
 
 
 def load_plate(filename: str) -> Plate:
