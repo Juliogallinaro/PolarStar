@@ -70,7 +70,7 @@ $ pip install polarstar
 
 ## Usage
 
-Please see the [Usage] for details.
+Please see the [tutorial] for details.
 
 ## Contributing
 
@@ -101,4 +101,4 @@ This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter]
 
 [license]: https://github.com/juliogallinaro/PolarStar/blob/main/LICENSE
 [contributor guide]: https://github.com/juliogallinaro/PolarStar/blob/main/CONTRIBUTING.md
-[usage]: https://PolarStar.readthedocs.io/en/latest/usage.html
+[tutorial]: https://PolarStar.readthedocs.io/en/latest/tutorial.html

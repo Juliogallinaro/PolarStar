@@ -6,7 +6,7 @@ end-before: <!-- github-only -->
 
 [license]: license
 [contributor guide]: contributing
-[usage]: usage
+[tutorial]: Tutorial
 
 ```{toctree}
 ---
@@ -14,7 +14,7 @@ hidden:
 maxdepth: 1
 ---
 
-usage
+Tutorial
 reference
 contributing
 Code of Conduct <codeofconduct>
