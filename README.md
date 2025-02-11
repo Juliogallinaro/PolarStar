@@ -101,4 +101,4 @@ This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter]
 
 [license]: https://github.com/juliogallinaro/PolarStar/blob/main/LICENSE
 [contributor guide]: https://github.com/juliogallinaro/PolarStar/blob/main/CONTRIBUTING.md
-[tutorial]: https://PolarStar.readthedocs.io/en/latest/tutorial.html
+[tutorial]: https://polarstar.readthedocs.io/en/latest/Tutorial.html
