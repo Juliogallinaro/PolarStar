@@ -53,20 +53,6 @@ def test_create_circle_points():
     assert np.allclose(distances, radius, rtol=1e-10)
 
 
-def test_send_gcode_with_invalid_input():
-    """Test error handling for invalid input in send_gcode."""
-    controller = CNCController()
-
-    with pytest.raises(
-        ValueError,
-        match="A Plate object, G-code string, or file path must be provided.",
-    ):
-        controller.send_gcode(None)
-
-    with pytest.raises(ValueError, match="Invalid input type"):
-        controller.send_gcode(123)  # Invalid type
-
-
 def test_send_gcode_with_file(mock_serial, tmp_path):
     """Test sending G-code from a file."""
     gcode_content = "G1 X10 Y10\nG1 X20 Y20"

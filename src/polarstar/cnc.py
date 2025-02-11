@@ -115,7 +115,7 @@ class CNCController:
             time.sleep(0.1)
 
     def _parse_gcode_input(self, input_data: Optional[Union["Plate", str]]) -> str:
-        """Process input_data and return a valid G-code string.
+        """Parse input data into G-code string.
 
         Parameters
         ----------
@@ -128,69 +128,35 @@ class CNCController:
         Returns
         -------
         str
-            A valid G-code string.
+            The parsed G-code string.
 
         Raises
         ------
         ValueError
-            If `input_data` is None or invalid.
+            If input_data is None or invalid.
         """
         if input_data is None:
             raise ValueError(
                 "A Plate object, G-code string, or file path must be provided."
             )
 
-        if isinstance(input_data, Plate):
-            return input_data.generate_gcode()
-
-        if isinstance(input_data, str):
-            if os.path.isfile(input_data):  # Check if it's a file path
-                with open(input_data) as file:
-                    return file.read()
-            return input_data  # Assume it's a G-code string
-
-        raise ValueError(
-            "Invalid input type. Provide a Plate object, G-code string, or file path."
-        )
-
-    def parse_gcode_input(self, input_data: Optional[Union["Plate", str]]) -> str:
-        """Process input_data and return a valid G-code string.
-
-        Parameters
-        ----------
-        input_data : Plate, str, or file path
-            Can be:
-            - A `Plate` object (generates G-code automatically).
-            - A string containing G-code.
-            - A file path to a G-code file.
-
-        Returns
-        -------
-        str
-            A valid G-code string.
-
-        Raises
-        ------
-        ValueError
-            If `input_data` is None or invalid.
-        """
-        if input_data is None:
+        # Type checking before processing
+        if not isinstance(input_data, (Plate, str)):
             raise ValueError(
-                "A Plate object, G-code string, or file path must be provided."
+                "Invalid input type. Must be a Plate object, G-code string, or file path."
             )
 
+        # If input is a Plate object, generate G-code
         if isinstance(input_data, Plate):
             return input_data.generate_gcode()
 
-        if isinstance(input_data, str):
-            if os.path.isfile(input_data):  # Check if it's a file path
-                with open(input_data) as file:
-                    return file.read()
-            return input_data  # Assume it's a G-code string
+        # If input is a string, check if it's a file path
+        if os.path.isfile(input_data):
+            with open(input_data) as f:
+                return f.read()
 
-        raise ValueError(
-            "Invalid input type. Provide a Plate object, G-code string, or file path."
-        )
+        # Otherwise, treat it as direct G-code
+        return input_data
 
     def send_gcode(self, input_data: Optional[Union["Plate", str]] = None) -> None:
         """Send G-code commands to the CNC machine.
@@ -211,7 +177,7 @@ class CNCController:
             If there is an error in serial communication.
         """
         try:
-            gcode_str = self.parse_gcode_input(input_data)
+            gcode_str = self._parse_gcode_input(input_data)
 
             # Establish serial communication
             cnc_serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
@@ -265,7 +231,9 @@ class CNCController:
         np.ndarray
             Array of positions (x, y, z).
         """
-        positions = [(0, 0, 0)]
+        positions: List[Tuple[float, float, float]] = [
+            (0.0, 0.0, 0.0)
+        ]  # Changed to float tuple
         current_pos = {"X": 0.0, "Y": 0.0, "Z": 0.0}
 
         gcode = plate.generate_gcode()
@@ -333,8 +301,8 @@ class CNCController:
                 if plate.data[row, col] is not None:
                     _, _, color, _, _ = plate.data[row, col]
                     ax.plot(x, y, z, color="black", linewidth=1)
+                    verts = list(zip(x, y, z))
 
-                    verts = list(zip(x, y, z, strict=False))
                     art3d_poly = art3d.Poly3DCollection([verts])
                     art3d_poly.set_color(color)
                     art3d_poly.set_alpha(0.5)
@@ -378,20 +346,24 @@ class CNCController:
         ax.set_zticks(np.linspace(np.floor(z_min), np.ceil(z_max), 4, dtype=int))
 
         # Animation
-        if positions.size:
-            (line,) = ax.plot([], [], [], "r-", linewidth=2)
-            (point,) = ax.plot([], [], [], "ro", markersize=8)
-
-            def update(frame):
-                line.set_data(positions[: frame + 1, 0], positions[: frame + 1, 1])
-                line.set_3d_properties(positions[: frame + 1, 2])
-                point.set_data([positions[frame, 0]], [positions[frame, 1]])
-                point.set_3d_properties([positions[frame, 2]])
-                return line, point
-
-            anim = FuncAnimation(
-                fig, update, frames=len(positions), interval=100, blit=True
-            )
-
+        if not positions.size:
+            # If there are no positions, return a static plot
             plt.close()
-            return HTML(anim.to_jshtml())
+            return HTML(fig.canvas.to_html5_fmt())
+
+        (line,) = ax.plot([], [], [], "r-", linewidth=2)
+        (point,) = ax.plot([], [], [], "ro", markersize=8)
+
+        def update(frame):
+            line.set_data(positions[: frame + 1, 0], positions[: frame + 1, 1])
+            line.set_3d_properties(positions[: frame + 1, 2])
+            point.set_data([positions[frame, 0]], [positions[frame, 1]])
+            point.set_3d_properties([positions[frame, 2]])
+            return line, point
+
+        anim = FuncAnimation(
+            fig, update, frames=len(positions), interval=100, blit=True
+        )
+
+        plt.close()
+        return HTML(anim.to_jshtml())
