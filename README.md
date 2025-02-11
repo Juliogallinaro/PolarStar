@@ -23,14 +23,15 @@
 
 ## Overview
 
-**POLAR** (Platform for Optical Laboratory Automation and Research) and **STAR** (Scientific Tools for Automation and Replication) are designed to facilitate the automation and control of experiments in scientific research, with a special focus on optical experiments.
+Polar Star is designed to facilitate the automation and control of experiments in scientific research, with a special focus on optical experiments.
 
-- **POLAR** is a hardware platform that enables precise control and automation in optical laboratories, supporting high-throughput experimentation and analysis.
-- **STAR** is a Python library that provides tools for automation, data collection, and analysis, designed to work seamlessly with POLAR or as a standalone solution for general scientific research.
+Polar Star consists of a modular hardware platform and a Python library that work together to enable precise control, automation, and data analysis in optical laboratories. The hardware supports high-throughput experimentation and precise positioning of optical instruments, while the software provides tools for automation, data collection, and integration with various scientific research applications.
 
-## POLAR: Platform for Optical Laboratory Automation and Research
+---
 
-**POLAR** is a modular hardware platform created for automating optical experiments, providing researchers with control over spectrometers, sensors, and other lab equipment. It supports precise positioning and integration of various optical instruments, making it ideal for high-throughput spectroscopy, photonics, and related experiments.
+## Polar Star: Platform for Optical Laboratory Automation and Research
+
+Polar Star is a modular hardware platform created for automating optical experiments, providing researchers with control over spectrometers, sensors, and other lab equipment. It supports precise positioning and integration of various optical instruments, making it ideal for high-throughput spectroscopy, photonics, and related experiments.
 
 ### Key Features
 
@@ -39,21 +40,21 @@
 - **Modular Design**: Easily integrates with a wide range of optical devices and equipment.
 - **Automation Support**: Enables automated, high-throughput experimental setups.
 
-### Getting Started with POLAR
+### Getting Started with Polar Star
 
-To use POLAR, you can set up the equipment and connect it to STAR for data collection and control.
+To use Polar Star, you can set up the equipment and connect it to the Python library for data collection and control.
 
 ---
 
-## STAR: Scientific Tools for Automation and Replication
+## Polar Star Python Library
 
-**STAR** is a Python library focused on simplifying the automation of scientific experiments, including data collection and hardware control. While STAR is designed to integrate with POLAR, it can also be used independently for various scientific applications.
+The Polar Star Python library focuses on simplifying the automation of scientific experiments, including data collection and hardware control. While designed to integrate with the hardware platform, it can also be used independently for various scientific applications.
 
-## Features
+### Features
 
 - **Automated Data Collection**: Simplifies gathering and processing data from different lab instruments.
 - **Hardware Control**: Provides interfaces to control lab equipment, including spectrometers and CNC machines.
-- **Scalable and Modular**: STAR’s design supports multiple scientific disciplines beyond optical experiments.
+- **Scalable and Modular**: Supports multiple scientific disciplines beyond optical experiments.
 
 ## Requirements
 
