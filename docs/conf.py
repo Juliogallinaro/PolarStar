@@ -11,3 +11,7 @@ extensions = [
 ]
 autodoc_typehints = "description"
 html_theme = "furo"
+
+rst_prolog = """
+.. |line-length-limit| replace:: 1000
+"""
